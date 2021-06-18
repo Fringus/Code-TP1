@@ -6,21 +6,18 @@ import
   StyleSheet,
   Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
 import React, {useState} from 'react';
 
-import { StatusBar } from 'expo-status-bar';
-import Ventanita from './components/Ventanita';
-import {VirtualizedList} from 'react-native-web';
+import Modal from './components/Modal'
 
 export default function App() {
 
-  
   const [inputText, setInputText] = useState('');
   const [itemList, setItemList] = useState([]);
 
-  const [itemSelected, setItemSelected] = useState({});
+  const [itemSelected,setItemSelected] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleChangeText= (text) => setInputText(text);
@@ -51,7 +48,7 @@ export default function App() {
     setItemSelected(itemList.find(item=>item.id === id));
     setModalVisible(true);
   }
-
+  
   return (
     <View style ={styles.screen}>
       {/*Head*/}
@@ -64,8 +61,8 @@ export default function App() {
         <Button title= "ADD" onPress={handleAddItem}></Button>
       </View>
       {/*Body*/}
-      <ScrollView style={styles.itemBox} horizontal>
-      <FlatList
+      <ScrollView style={[styles.itemBox ,styles.shadow]}  horizontal>
+      <FlatList 
         data = {itemList}
         renderItem = { data => {
           return (
@@ -77,16 +74,16 @@ export default function App() {
         }}
         keyExtractor={item => item.id}
         ></FlatList>
-        <Ventanita
-          modalVisible={modalVisible}
-          handleConfirmeDelete={handleConfirmeDelete}
-          itemSelected={itemSelected}
-          handleDontDelete={handleDontDelete}
-        ></Ventanita>
+        <Modal 
+        modalVisible={modalVisible}
+        handleConfirmeDelete={handleConfirmeDelete}
+        handleDontDelete={handleDontDelete}
+        itemSelected={itemSelected}
+        />
       </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   screen: {
@@ -132,5 +129,27 @@ const styles = StyleSheet.create({
   button: {
     width:20,
     margin: 5,
+  },
+  modal: {
+    marginTop: 200,
+    margin: 100,
+    height: 150,
+    padding: 0,
+    borderWidth: 3,
+    borderColor: 'black',
+    backgroundColor: '#ECECEC',
+    alignItems: 'center',
+    justifyContent: 'center',
+    justifyContent: 'space-evenly',
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+    width: 0,
+    height: 12,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 200,
+    elevation: 24,
   },
 });
