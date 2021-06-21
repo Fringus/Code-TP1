@@ -2,21 +2,19 @@ import
 {
   Button,
   FlatList,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
 
-import { StatusBar } from 'expo-status-bar';
-import Ventanita from './components/Ventanita';
-import {VirtualizedList} from 'react-native-web';
+import AddItem from './components/AddItem'
+import List from './components/Lista';
+import ModalWindow from './components/ModalWindow';
 
 export default function App() {
-
-  
   const [inputText, setInputText] = useState('');
   const [itemList, setItemList] = useState([]);
 
@@ -42,6 +40,12 @@ export default function App() {
     setModalVisible(false);
     setItemSelected({});
   }
+  const handleDeleteAll = () =>{
+    while(itemList.length > 0) {
+      itemList.pop();
+    }
+    setItemSelected({});
+  }
   const handleDontDelete = () =>{
     setModalVisible(false);
     setItemSelected({});
@@ -55,35 +59,25 @@ export default function App() {
   return (
     <View style ={styles.screen}>
       {/*Head*/}
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Add item" 
-        style={styles.input}
-        onChangeText={handleChangeText}
-        value={inputText}
-        ></TextInput>
-        <Button title= "ADD" onPress={handleAddItem}></Button>
-      </View>
+      <AddItem
+        handleChangeText = {handleChangeText}
+        handleAddItem = {handleAddItem}
+        inputText = {inputText}
+      ></AddItem>
       {/*Body*/}
       <ScrollView style={styles.itemBox} horizontal>
-      <FlatList
-        data = {itemList}
-        renderItem = { data => {
-          return (
-          <View style={styles.itemList}>
-            <Text style={styles.item}> {data.item.value} </Text>
-            <Button title= 'X' style={styles.button} onPress={() => handleModal(data.item.id)}></Button>
-          </View>
-          );
-        }}
-        keyExtractor={item => item.id}
-        ></FlatList>
-        <Ventanita
-          modalVisible={modalVisible}
-          handleConfirmeDelete={handleConfirmeDelete}
-          itemSelected={itemSelected}
-          handleDontDelete={handleDontDelete}
-        ></Ventanita>
+      <List
+      itemList={itemList}
+      handleModal={handleModal}
+      />
+      <ModalWindow
+        modalVisible={modalVisible}
+        itemSelected={itemSelected}
+        handleConfirmeDelete={handleConfirmeDelete}
+        handleDontDelete={handleDontDelete}
+      ></ModalWindow>
       </ScrollView>
+      <Button title='Erase all' onPress={handleDeleteAll}></Button>
     </View>
   );
 }
@@ -93,44 +87,13 @@ const styles = StyleSheet.create({
     padding: 30,
     paddingTop: 50,
   },
-  inputContainer: {
-      flexDirection: 'row',
-      alignItems:'center',
-      justifyContent: 'space-between',
-  },
-  input: {
-    width: 200,
-    borderBottomColor: 'black',
-    borderBottomWidth: 1
-  },
-  itemList: {
-    flexDirection: 'row',
-    alignItems:'flex-end',
-    justifyContent: 'space-between',
-    marginTop: 5,
-    marginBottom: 5,
-    marginLeft: 5,
-    marginRight: 5,
-  },
   itemBox: {
     marginTop: 20,
     padding: 0,
-    height: 600,
+    height: 650,
     borderWidth: 3,
+    borderRadius: 20,
     borderColor: 'black',
     backgroundColor: '#ECECEC',
-  },
-  item: {
-    justifyContent: 'flex-start',
-    width: 260,
-    marginTop: 10,
-    marginLeft: 8,
-    marginRight: 8,
-    borderBottomColor: 'black',
-    borderBottomWidth: 1
-  },
-  button: {
-    width:20,
-    margin: 5,
   },
 });
