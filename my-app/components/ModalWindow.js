@@ -18,10 +18,9 @@ export default function ModalWindow({
   <Modal transparent={true} animationType="slide" visible={modalVisible}>
     <View style={styles.modal}>
       <Text flexDirection="">Eliminar:</Text>
-      <Text style={styles.modalItemToErase}> {itemSelected.value} </Text>
-      <View flexDirection={"row"}>
-        <Button title="Si" onPress={handleConfirmeDelete} ></Button>
-        <Text> </Text>
+      <Text textAlign='center'> {itemSelected.value} </Text>
+      <View style={styles.buttons}>
+        <Button title="Si" onPress={handleConfirmeDelete}></Button>
         <Button title="No" onPress={handleDontDelete}></Button>
       </View>
     </View>
@@ -43,7 +42,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     justifyContent: 'space-evenly',
   },
-  modalItemToErase: {
-    textAlign: 'center',
-  }
+  buttons: {
+    width: '100%',
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+  },
 })
